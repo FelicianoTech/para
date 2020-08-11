@@ -1,0 +1,9 @@
+# Binaries
+/src/para
+/dist/
+
+# Snapcraft
+*.snap
+/parts/
+/prime/
+/stage/

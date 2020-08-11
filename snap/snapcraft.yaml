@@ -1,0 +1,32 @@
+name: para
+title: "para"
+summary: "A useful tool for software package manager analytics."
+description: |
+  para is short for Packages and Releases Analytics. It allows you to view download and install metrics for your software distributables on GitHub, Snap, Brew, and more coming soon.
+
+  Starting a new project? You can check for name availability on these platforms.
+license: MIT
+base: core18
+grade: stable
+confinement: strict
+adopt-info: para
+
+parts:
+  para:
+    plugin: dump
+    source: .
+    override-build: |
+      snapcraftctl build
+
+      cp dist/para_linux_amd64/para $SNAPCRAFT_PART_INSTALL
+
+      chmod +x $SNAPCRAFT_PART_INSTALL/para
+
+      snapcraftctl set-version $(cat VERSION)
+
+apps:
+  para:
+    command: para
+    plugs:
+      - home
+      - network
