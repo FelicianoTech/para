@@ -1,19 +1,21 @@
 project_name: para
 
 builds:
-  -
-    dir: src
+  - dir: src
     goos:
       - linux
       - darwin
+      - windows
     goarch:
       - amd64
     ldflags:
       - -s -w -X github.com/halseylabs/para/cmd.version={{ .Version }} -extldflags "-static"
 
 archives:
-  -
-    format: tar.gz
+  - format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
     name_template: "{{ .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     files:
       - LICENSE
@@ -22,8 +24,7 @@ archives:
       darwin: macos
 
 nfpms:
-  -
-    file_name_template: "{{ .ProjectName }}-v{{ .Version }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+  - file_name_template: "{{ .ProjectName }}-v{{ .Version }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     homepage: "https://github.com/HalseyLabs"
     maintainer: "Ricardo Feliciano and Michael Ibragimchayev"
     description: "A useful tool for software package manager analytics."
