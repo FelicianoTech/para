@@ -7,17 +7,19 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/felicianotech/sonar/sonar/docker"
 	"github.com/spf13/cobra"
 )
 
 var (
 	brewFlag string
 	ghFlag   string
+	dhFlag   string
 
 	// fetchCmd represents the fetch command
 	fetchCmd = &cobra.Command{
 		Use:   "fetch",
-		Short: "Fetch install data from Brew and/or GitHub",
+		Short: "Fetch install data from Brew, GitHub, and/or Docker Hub",
 		Run: func(cmd *cobra.Command, args []string) {
 
 			if brewFlag != "" {
@@ -28,6 +30,10 @@ var (
 			if ghFlag != "" {
 				fetchGitHubData(ghFlag)
 			}
+
+			if dhFlag != "" {
+				fetchDockerHubData(dhFlag)
+			}
 		},
 	}
 )
@@ -37,6 +43,7 @@ func init() {
 
 	fetchCmd.PersistentFlags().StringVar(&brewFlag, "brew", "", "Brew formula name")
 	fetchCmd.PersistentFlags().StringVar(&ghFlag, "github", "", "GitHub orgname/reponame")
+	fetchCmd.PersistentFlags().StringVar(&dhFlag, "dockerhub", "", "Docker image")
 }
 
 type formulaMetric struct {
@@ -122,4 +129,21 @@ func fetchGitHubData(repo string) {
 		}
 	}
 
+}
+
+func fetchDockerHubData(image string) {
+
+	pulls, err := docker.ImagePulls(image)
+	if err != nil {
+		log.Fatal("Error: Failed to fetch Docker Hub pulls.")
+	}
+
+	stars, err := docker.ImageStars(image)
+	if err != nil {
+		log.Fatal("Error: Failed to fetch Docker Hub stars.")
+	}
+
+	fmt.Println("Docker Hub data:")
+	fmt.Printf("The number of pulls for %s is: %d\n", image, pulls)
+	fmt.Printf("The number of stars for %s is: %d\n", image, stars)
 }
