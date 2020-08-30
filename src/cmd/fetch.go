@@ -29,10 +29,12 @@ var (
 
 			if ghFlag != "" {
 				fetchGitHubData(ghFlag)
+				fmt.Println("")
 			}
 
 			if dhFlag != "" {
 				fetchDockerHubData(dhFlag)
+				fmt.Println("")
 			}
 		},
 	}
