@@ -96,7 +96,7 @@ jobs:
         type: boolean
         default: false
     docker:
-      - image: cibuilds/snapcraft:core18
+      - image: cibuilds/snapcraft:core20
     steps:
       - checkout
       - attach_workspace:
@@ -124,4 +124,4 @@ jobs:
                 command: |
                   # Snapcraft Tokens are valid for 1 year. This one expires August 10th, 2021
                   echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
-                  snapcraft push *.snap --release=stable
+                  snapcraft upload *.snap --release=stable

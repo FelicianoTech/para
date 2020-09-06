@@ -6,7 +6,7 @@ description: |
 
   Starting a new project? You can check for name availability on these platforms.
 license: MIT
-base: core18
+base: core20
 grade: stable
 confinement: strict
 adopt-info: para
