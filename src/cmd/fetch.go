@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/CircleCI-Public/circleci-cli/api"
+	"github.com/CircleCI-Public/circleci-cli/api/graphql"
 	"github.com/felicianotech/sonar/sonar/docker"
 	"github.com/spf13/cobra"
 )
@@ -15,6 +17,7 @@ var (
 	brewFlag string
 	ghFlag   string
 	dhFlag   string
+	oFlag    string
 
 	// fetchCmd represents the fetch command
 	fetchCmd = &cobra.Command{
@@ -36,6 +39,11 @@ var (
 				fetchDockerHubData(dhFlag)
 				fmt.Println("")
 			}
+
+			if oFlag != "" {
+				fetchOrbData(oFlag)
+				fmt.Println("")
+			}
 		},
 	}
 )
@@ -46,6 +54,7 @@ func init() {
 	fetchCmd.PersistentFlags().StringVar(&brewFlag, "brew", "", "Brew formula name")
 	fetchCmd.PersistentFlags().StringVar(&ghFlag, "github", "", "GitHub orgname/reponame")
 	fetchCmd.PersistentFlags().StringVar(&dhFlag, "dockerhub", "", "Docker image")
+	fetchCmd.PersistentFlags().StringVar(&oFlag, "orb", "", "CircleCI Orb namespace/name")
 }
 
 type formulaMetric struct {
@@ -148,4 +157,22 @@ func fetchDockerHubData(image string) {
 	fmt.Println("Docker Hub data:")
 	fmt.Printf("The number of pulls for %s is: %d\n", image, pulls)
 	fmt.Printf("The number of stars for %s is: %d\n", image, stars)
+}
+
+func fetchOrbData(orb string) {
+
+	gqlClient := graphql.NewClient("https://circleci.com", "graphql-unstable", "", false)
+
+	orbInfo, err := api.OrbInfo(gqlClient, orb)
+	if err != nil {
+		fmt.Println("Failed to list Orbs.")
+		fmt.Print(err)
+	}
+
+	orbStats := orbInfo.Orb.Statistics
+
+	fmt.Println("CircleCI Orb data:")
+	fmt.Printf("# of jobs orb was used in (last 30 days): %d\n", orbStats.Last30DaysBuildCount)
+	fmt.Printf("# of projects orb was used in (last 30 days): %d\n", orbStats.Last30DaysProjectCount)
+	fmt.Printf("# of organizations orb was used in (last 30 days): %d\n", orbStats.Last30DaysOrganizationCount)
 }
