@@ -3,6 +3,7 @@ module github.com/halseylabs/para
 go 1.15
 
 require (
+	github.com/CircleCI-Public/circleci-cli v0.1.11458
 	github.com/felicianotech/sonar v0.9.1
 	github.com/magefile/mage v1.10.0
 	github.com/sirupsen/logrus v1.4.2
