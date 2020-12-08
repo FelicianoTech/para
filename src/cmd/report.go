@@ -19,10 +19,11 @@ var (
 	dhFlag   string
 	oFlag    string
 
-	// fetchCmd represents the fetch command
-	fetchCmd = &cobra.Command{
-		Use:   "fetch",
-		Short: "Fetch install data from Brew, GitHub, and/or Docker Hub",
+	// reportCmd represents the report command
+	reportCmd = &cobra.Command{
+		Use:     "report",
+		Aliases: []string{"fetch"},
+		Short:   "Report on installs via Brew, GitHub, and/or Docker Hub",
 		Run: func(cmd *cobra.Command, args []string) {
 
 			if brewFlag != "" {
@@ -49,12 +50,12 @@ var (
 )
 
 func init() {
-	rootCmd.AddCommand(fetchCmd)
+	rootCmd.AddCommand(reportCmd)
 
-	fetchCmd.PersistentFlags().StringVar(&brewFlag, "brew", "", "Brew formula name")
-	fetchCmd.PersistentFlags().StringVar(&ghFlag, "github", "", "GitHub orgname/reponame")
-	fetchCmd.PersistentFlags().StringVar(&dhFlag, "dockerhub", "", "Docker image")
-	fetchCmd.PersistentFlags().StringVar(&oFlag, "orb", "", "CircleCI Orb namespace/name")
+	reportCmd.PersistentFlags().StringVar(&brewFlag, "brew", "", "Brew formula name")
+	reportCmd.PersistentFlags().StringVar(&ghFlag, "github", "", "GitHub orgname/reponame")
+	reportCmd.PersistentFlags().StringVar(&dhFlag, "dockerhub", "", "Docker image")
+	reportCmd.PersistentFlags().StringVar(&oFlag, "orb", "", "CircleCI Orb namespace/name")
 }
 
 type formulaMetric struct {

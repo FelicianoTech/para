@@ -2,15 +2,15 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 )
 
 var cfgFile string
 
 var rootCmd = &cobra.Command{
-	Use: "para",
-	//Short:   "Fetch release metrics for your project",
+	Use:   "para",
 	Short: "Get information on packages and releases",
 	Long: `para is short for Packages and Releases Analytics. It allows you to view download and install metrics for your software distributables on GitHub, Snap, Brew, and more coming soon.
 
