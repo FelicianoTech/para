@@ -16,7 +16,7 @@ import (
 var (
 	brewFlag string
 	ghFlag   string
-	dhFlag   string
+	dhFlag   []string
 	oFlag    string
 
 	// reportCmd represents the report command
@@ -24,6 +24,8 @@ var (
 		Use:     "report",
 		Aliases: []string{"fetch"},
 		Short:   "Report on installs via Brew, GitHub, and/or Docker Hub",
+		Long: `The --dockerhub flag can be used multiple times for multiple images.
+`,
 		Run: func(cmd *cobra.Command, args []string) {
 
 			if brewFlag != "" {
@@ -36,9 +38,11 @@ var (
 				fmt.Println("")
 			}
 
-			if dhFlag != "" {
-				fetchDockerHubData(dhFlag)
-				fmt.Println("")
+			if len(dhFlag) > 0 {
+				for _, img := range dhFlag {
+					fetchDockerHubData(img)
+					fmt.Println("")
+				}
 			}
 
 			if oFlag != "" {
@@ -54,7 +58,7 @@ func init() {
 
 	reportCmd.PersistentFlags().StringVar(&brewFlag, "brew", "", "Brew formula name")
 	reportCmd.PersistentFlags().StringVar(&ghFlag, "github", "", "GitHub orgname/reponame")
-	reportCmd.PersistentFlags().StringVar(&dhFlag, "dockerhub", "", "Docker image")
+	reportCmd.PersistentFlags().StringSliceVar(&dhFlag, "dockerhub", []string{}, "Docker image")
 	reportCmd.PersistentFlags().StringVar(&oFlag, "orb", "", "CircleCI Orb namespace/name")
 }
 
