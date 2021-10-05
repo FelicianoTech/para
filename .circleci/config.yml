@@ -11,15 +11,6 @@ workflows:
           version: "0.180.3"
           go-version: "1.17.1"
           dry-run: true
-          post-steps:
-            - persist_to_workspace:
-                root: "."
-                paths:
-                  - "dist"
-      - build-snap:
-          name: "Build Snap"
-          requires:
-            - gor/release
   release:
     jobs:
       - test:
@@ -38,22 +29,6 @@ workflows:
             tags:
               # Simplified SemVer regex
               only: /^v\d+\.\d+\.\d+$/
-          post-steps:
-            - persist_to_workspace:
-                root: "."
-                paths:
-                  - "dist"
-      - build-snap:
-          name: "Build 'stable' Snap"
-          requires:
-            - gor/release
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              # Simplified SemVer regex
-              only: /^v\d+\.\d+\.\d+$/
-          publish-stable: true
 
 jobs:
   test:
@@ -74,41 +49,3 @@ jobs:
           key: go-mod-v1
           paths:
             - "/go/pkg/mod"
-  build-snap:
-    parameters:
-      publish-edge:
-        type: boolean
-        default: false
-      publish-stable:
-        type: boolean
-        default: false
-    docker:
-      - image: cibuilds/snapcraft:core20
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run:
-          name: "Build Snaps for Each Architecture"
-          command: |
-            # Generate a version file that Snapcraft can use
-            dist/para_linux_amd64/para version --short > VERSION
-            snapcraft
-      - when:
-          condition: << parameters.publish-edge >>
-          steps:
-            - run:
-                name: "Publish to Snap Store in the Edge Channel"
-                command: |
-                  # Snapcraft Tokens are valid for 1 year. This one expires August 10th, 2021
-                  echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
-                  snapcraft push *.snap --release=edge
-      - when:
-          condition: << parameters.publish-stable >>
-          steps:
-            - run:
-                name: "Publish to Snap Store in the Stable Channel"
-                command: |
-                  # Snapcraft Tokens are valid for 1 year. This one expires August 10th, 2021
-                  echo $SNAPCRAFT_LOGIN_FILE | base64 --decode --ignore-garbage | snapcraft login --with -
-                  snapcraft upload *.snap --release=stable
