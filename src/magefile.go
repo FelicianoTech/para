@@ -1,4 +1,5 @@
-//+build mage
+//go:build mage
+// +build mage
 
 package main
 
@@ -17,5 +18,5 @@ func Install() error {
 
 func Remove() error {
 
-	return sh.Run("go", "clean", "-i", "github.com/halseylabs/para")
+	return sh.Run("go", "clean", "-i", "github.com/felicianotech/para")
 }
