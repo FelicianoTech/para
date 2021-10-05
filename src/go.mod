@@ -1,4 +1,4 @@
-module github.com/halseylabs/para
+module github.com/felicianotech/para
 
 go 1.15
 

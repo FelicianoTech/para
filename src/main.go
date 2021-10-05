@@ -1,6 +1,6 @@
 package main
 
-import "github.com/halseylabs/para/cmd"
+import "github.com/felicianotech/para/cmd"
 
 func main() {
 	cmd.Execute()
