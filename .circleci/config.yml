@@ -41,10 +41,10 @@ jobs:
             - go-mod-v1
       - run:
           name: "Download Dependancies"
-          command: cd src && go mod download
+          command: cd para && go mod download
       - run:
           name: "Run Tests"
-          command: cd src && go test
+          command: cd para && go test
       - save_cache:
           key: go-mod-v1
           paths:
