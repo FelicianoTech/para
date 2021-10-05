@@ -29,6 +29,7 @@ workflows:
             tags:
               # Simplified SemVer regex
               only: /^v\d+\.\d+\.\d+$/
+          context: main
 
 jobs:
   test:
