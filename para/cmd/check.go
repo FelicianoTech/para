@@ -77,6 +77,20 @@ var runCmd = &cobra.Command{
 		} else {
 			fmt.Println("NPM: not sure")
 		}
+
+		resp, err = http.Get("https://pypi.org/pypi/" + args[0] + "/json")
+		if err != nil {
+			log.Error(err)
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode == 404 {
+			fmt.Println("PyPI: available")
+		} else if resp.StatusCode == 200 {
+			fmt.Println("PyPI: unavailable")
+		} else {
+			fmt.Println("PyPI: not sure")
+		}
 	},
 }
 
