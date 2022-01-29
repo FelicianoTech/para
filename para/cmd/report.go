@@ -166,7 +166,7 @@ func fetchDockerHubData(image string) {
 
 func fetchOrbData(orb string) {
 
-	gqlClient := graphql.NewClient("https://circleci.com", "graphql-unstable", "", false)
+	gqlClient := graphql.NewClient(http.DefaultClient, "https://circleci.com", "graphql-unstable", "", false)
 
 	orbInfo, err := api.OrbInfo(gqlClient, orb)
 	if err != nil {
